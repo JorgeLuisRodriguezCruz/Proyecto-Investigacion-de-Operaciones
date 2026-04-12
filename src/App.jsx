@@ -1,8 +1,26 @@
+import { useState } from 'react'
 import { Box, Typography } from '@mui/material'
 import Menu from './components/Menu/Menu'
+import OptimalBSTPage from './components/ABB/OptimalBSTPage'
 import { colors } from './theme/colors'
 
+const SCREEN = {
+  MENU: 'menu',
+  OBST: 'obst'
+}
+
 function App() {
+  const [screen, setScreen] = useState(SCREEN.MENU)
+
+  const handleMenuSelect = (title) => {
+    if (title === 'Árboles Binarios de Búsqueda Óptimos') {
+      setScreen(SCREEN.OBST)
+      return
+    }
+
+    window.alert('Esta opción del menú aún no está implementada.')
+  }
+
   return (
     <Box
       sx={{
@@ -10,7 +28,7 @@ function App() {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        justifyContent: 'center',
+        justifyContent: screen === SCREEN.MENU ? 'center' : 'flex-start',
         backgroundColor: colors.background,
         padding: '2rem'
       }}
@@ -18,14 +36,18 @@ function App() {
       <Typography
         variant="h1"
         sx={{
-          marginBottom: '5rem',
+          marginBottom: screen === SCREEN.MENU ? '5rem' : '2rem',
           textAlign: 'center'
         }}
       >
         Algoritmos de Programación Dinámica
       </Typography>
 
-      <Menu />
+      {screen === SCREEN.MENU ? (
+        <Menu onSelect={handleMenuSelect} />
+      ) : (
+        <OptimalBSTPage onBack={() => setScreen(SCREEN.MENU)} />
+      )}
 
       <Box
         component="footer"

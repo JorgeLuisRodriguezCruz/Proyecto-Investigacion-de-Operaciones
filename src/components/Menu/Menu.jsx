@@ -19,11 +19,7 @@ const menuOptions = [
   }
 ]
 
-function Menu() {
-  const handleClick = (title) => {
-    console.log(`Clicked: ${title}`)
-  }
-
+function Menu({ onSelect }) {
   return (
     <div
       style={{
@@ -38,7 +34,7 @@ function Menu() {
           key={option.title}
           title={option.title}
           description={option.description}
-          onClick={() => handleClick(option.title)}
+          onClick={() => onSelect(option.title)}
         />
       ))}
     </div>
