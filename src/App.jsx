@@ -1,8 +1,12 @@
+import { useState } from 'react'
 import { Box, Typography } from '@mui/material'
 import Menu from './components/Menu/Menu'
+import MultiplicacionMatrices from './components/MultiplicaciondeMatrices/MultiplicaciondeMatrices.jsx'
 import { colors } from './theme/colors'
 
 function App() {
+  const [selectedModule, setSelectedModule] = useState(null)
+
   return (
     <Box
       sx={{
@@ -10,7 +14,7 @@ function App() {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        justifyContent: 'center',
+        justifyContent: selectedModule ? 'flex-start' : 'center',
         backgroundColor: colors.background,
         padding: '2rem'
       }}
@@ -25,7 +29,11 @@ function App() {
         Algoritmos de Programación Dinámica
       </Typography>
 
-      <Menu />
+      {selectedModule === 'Multiplicación de Matrices' ? (
+        <MultiplicacionMatrices onBack={() => setSelectedModule(null)} />
+      ) : (
+        <Menu onSelect={setSelectedModule} />
+      )}
 
       <Box
         component="footer"

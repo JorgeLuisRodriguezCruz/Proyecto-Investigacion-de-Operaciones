@@ -19,8 +19,13 @@ const menuOptions = [
   }
 ]
 
-function Menu() {
+function Menu({ onSelect }) {
   const handleClick = (title) => {
+    if (title === 'Multiplicación de Matrices') {
+      onSelect(title)
+      return
+    }
+
     console.log(`Clicked: ${title}`)
   }
 
