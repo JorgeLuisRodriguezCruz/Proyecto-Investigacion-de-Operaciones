@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Box, Typography } from '@mui/material'
 import Menu from './components/Menu/Menu'
 import MultiplicacionMatrices from './components/MultiplicaciondeMatrices/MultiplicaciondeMatrices.jsx'
+import ReemplazoEquipos from './components/ReemplazoEquipos/ReemplazoEquipos.jsx'
 import { colors } from './theme/colors'
 
 function App() {
@@ -31,6 +32,8 @@ function App() {
 
       {selectedModule === 'Multiplicación de Matrices' ? (
         <MultiplicacionMatrices onBack={() => setSelectedModule(null)} />
+      ) : selectedModule === 'Reemplazo de Equipos' ? (
+        <ReemplazoEquipos onBack={() => setSelectedModule(null)} />
       ) : (
         <Menu onSelect={setSelectedModule} />
       )}

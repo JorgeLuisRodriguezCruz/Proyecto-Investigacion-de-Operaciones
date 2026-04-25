@@ -21,7 +21,7 @@ const menuOptions = [
 
 function Menu({ onSelect }) {
   const handleClick = (title) => {
-    if (title === 'Multiplicación de Matrices') {
+    if (title === 'Multiplicación de Matrices' || title === 'Reemplazo de Equipos') {
       onSelect(title)
       return
     }
