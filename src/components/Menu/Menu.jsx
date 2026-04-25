@@ -20,15 +20,6 @@ const menuOptions = [
 ]
 
 function Menu({ onSelect }) {
-  const handleClick = (title) => {
-    if (title === 'Multiplicación de Matrices') {
-      onSelect(title)
-      return
-    }
-
-    console.log(`Clicked: ${title}`)
-  }
-
   return (
     <div
       style={{
@@ -43,7 +34,7 @@ function Menu({ onSelect }) {
           key={option.title}
           title={option.title}
           description={option.description}
-          onClick={() => handleClick(option.title)}
+          onClick={() => onSelect(option.title)}
         />
       ))}
     </div>
