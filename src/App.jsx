@@ -2,7 +2,9 @@ import { useState } from 'react'
 import { Box, Typography } from '@mui/material'
 import Menu from './components/Menu/Menu'
 import MultiplicacionMatrices from './components/MultiplicaciondeMatrices/MultiplicaciondeMatrices.jsx'
+import Series from './components/MenuSeriesDeportivas/SeriesDeportivas.jsx'
 import { colors } from './theme/colors'
+import SeriesDeportivas from './components/MenuSeriesDeportivas/SeriesDeportivas.jsx'
 
 function App() {
   const [selectedModule, setSelectedModule] = useState(null)
@@ -31,6 +33,8 @@ function App() {
 
       {selectedModule === 'Multiplicación de Matrices' ? (
         <MultiplicacionMatrices onBack={() => setSelectedModule(null)} />
+      ) : selectedModule === 'Series Deportivas' ? (
+        <SeriesDeportivas onBack={() => setSelectedModule(null)} />
       ) : (
         <Menu onSelect={setSelectedModule} />
       )}
