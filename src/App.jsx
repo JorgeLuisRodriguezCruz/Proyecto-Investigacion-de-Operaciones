@@ -1,9 +1,10 @@
 import { useState } from 'react'
 import { Box, Typography } from '@mui/material'
+import { colors } from './theme/colors'
 import Menu from './components/Menu/Menu'
 import MultiplicacionMatrices from './components/MultiplicaciondeMatrices/MultiplicaciondeMatrices.jsx'
 import OptimalBSTPage from './components/ABB/OptimalBSTPage'
-import { colors } from './theme/colors'
+import SeriesDeportivas from './components/MenuSeriesDeportivas/SeriesDeportivas.jsx'
 
 const SCREEN = {
   MENU: 'menu',
@@ -22,6 +23,11 @@ function App() {
 
     if (title === 'Multiplicación de Matrices') {
       setScreen(SCREEN.MATRICES)
+      return
+    }
+
+    if (title === 'Series Deportivas') {
+      setScreen(SCREEN.SERIES)
       return
     }
 
@@ -61,6 +67,10 @@ function App() {
 
       {screen === SCREEN.OBST && (
         <OptimalBSTPage onBack={handleBack} />
+      )}
+
+      {screen === SCREEN.SERIES && (
+        <SeriesDeportivas onBack={handleBack} />
       )}
 
       {screen === SCREEN.MATRICES && (

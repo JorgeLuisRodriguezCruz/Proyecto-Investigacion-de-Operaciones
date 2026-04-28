@@ -6,12 +6,12 @@ const menuOptions = [
     description: 'Decide cuándo reemplazar maquinaria minimizando costos a lo largo del tiempo.'
   },
   {
-    title: 'Árboles Binarios de Búsqueda Óptimos',
-    description: 'Construye un árbol de búsqueda con costo de acceso mínimo.'
-  },
-  {
     title: 'Series Deportivas',
     description: 'Calcula la probabilidad de que un equipo gane una serie bajo ciertas reglas.'
+  },
+  {
+    title: 'Árboles Binarios de Búsqueda Óptimos',
+    description: 'Construye un árbol de búsqueda con costo de acceso mínimo.'
   },
   {
     title: 'Multiplicación de Matrices',
