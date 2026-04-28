@@ -16,25 +16,23 @@ import { colors } from '../../theme/colors'
 // Solo se permiten valores impares para n (un número par de juegos puede terminar en empate)
 const OPCIONES_N = [1, 3, 5, 7, 9, 11]
 
-// ============================================================
-// MÓDULO: Series Deportivas
-// Calcula Tabla[i][j] = P(A gana la serie | A necesita i vic., B necesita j vic.)
-// Fórmula: Tabla[i][j] = p * Tabla[i-1][j] + q * Tabla[i][j-1]
-//   p = prob. de que A gane el juego actual (ph si A es local, pr si A es visita)
-//   q = 1 - p = prob. de que B gane el juego actual
-// Casos base:
-//   Tabla[0][j] = 1  para j >= 1  (A ya ganó la serie)
-//   Tabla[i][0] = 0  para i >= 1  (B ya ganó la serie)
-//   Tabla[0][0] = indefinido / sin sentido
-// ============================================================
+/* ============================================================
+   MÓDULO: Series Deportivas
+   Calcula Tabla[i][j] = P(A gana la serie | A necesita i vic., B necesita j vic.)
+   Fórmula: Tabla[i][j] = p * Tabla[i-1][j] + q * Tabla[i][j-1]
+     p = prob. de que A gane el juego actual (ph si A es local, pr si A es visita)
+     q = 1 - p = prob. de que B gane el juego actual
+   Casos base:
+     Tabla[0][j] = 1  para j >= 1  (A ya ganó la serie)
+     Tabla[i][0] = 0  para i >= 1  (B ya ganó la serie)
+     Tabla[0][0] = indefinido / sin sentido
+   ============================================================ */
 function SeriesDeportivas({ onBack }) {
 
-  // Número máximo de juegos de la serie (siempre impar para evitar empates)
+  // Número máximo de juegos de la serie
   const [n, setN] = useState(7)
 
-  // Modo de cálculo:
-  //   true  = considera la diferencia entre jugar en casa y de visita (usa ph y pr)
-  //   false = una sola probabilidad fija p para todos los juegos
+  // Modo de cálculo si considerar o no la diferencia entre jugar en casa y de visita (usa ph y pr)
   const [usarLocalVisita, setUsarLocalVisita] = useState(true)
 
   // Probabilidad de que el equipo A gane cuando juega en casa
@@ -56,27 +54,21 @@ function SeriesDeportivas({ onBack }) {
   // Mensaje de error para mostrar al usuario
   const [error, setError] = useState('')
 
-  // --- Valores derivados ---
-
   // Victorias necesarias para ganar la serie: m = ⌊n/2⌋ + 1
   const m = Math.floor(n / 2) + 1
 
-  // Máximo de juegos posibles en la serie: 2m - 1 (igual a n cuando n es impar)
-  const maxJuegos = 2 * m - 1
-
-  // -------------------------------------------------------
-  // Actualiza n y redimensiona el arreglo de formato,
-  // conservando las posiciones que ya existían
-  // -------------------------------------------------------
+  /* =======================================================
+     Actualiza n y redimensiona el arreglo de formato,
+     conservando las posiciones que ya existían
+     ======================================================= */
   const handleNChange = (e) => {
     const nuevoN = Number(e.target.value)
     setN(nuevoN)
 
     const nuevoM = Math.floor(nuevoN / 2) + 1
-    const nuevoMaxJuegos = 2 * nuevoM - 1
 
-    const nuevoFormato = Array(nuevoMaxJuegos).fill(true)
-    for (let k = 0; k < Math.min(formato.length, nuevoMaxJuegos); k++) {
+    const nuevoFormato = Array(nuevoN).fill(true)
+    for (let k = 0; k < Math.min(formato.length, nuevoN); k++) {
       nuevoFormato[k] = formato[k]
     }
 
@@ -93,14 +85,14 @@ function SeriesDeportivas({ onBack }) {
     setResultado(null)
   }
 
-  // ============================================================
-  // ALGORITMO PRINCIPAL: Cálculo de probabilidades de la serie
-  //
-  // El número de juego en el estado (i, j) es determinístico:
-  //   numJuego = 2m - i - j + 1
-  // Esto permite saber si A es local o visita en ese juego
-  // consultando formato[numJuego - 1].
-  // ============================================================
+  /* ============================================================
+     Algoritmo: Cálculo de probabilidades de la serie
+    
+     El número de juego en el estado (i, j) es determinístico:
+       numJuego = 2m - i - j + 1
+     Esto permite saber si A es local o visita en ese juego
+     consultando formato[numJuego - 1].
+     ============================================================ */
   const calcularSerie = () => {
     setError('')
 
@@ -125,9 +117,8 @@ function SeriesDeportivas({ onBack }) {
       }
     }
 
-    // Inicializar Tabla como matriz (m+1) x (m+1) con null (índices 0..m)
-    // null indica celdas no calculadas o sin sentido (Tabla[0][0])
-    const Tabla = Array.from({ length: m + 1 }, () => Array(m + 1).fill(null))
+    // Inicializar Tabla como matriz (m+1) x (m+1) con null
+    const Tabla = Array.from({ length: m + 1 }, () => Array(m + 1).fill(null)) // map()
 
     // Caso base: A ya ganó la serie (i = 0) → probabilidad = 1
     for (let j = 1; j <= m; j++) Tabla[0][j] = 1
@@ -135,48 +126,41 @@ function SeriesDeportivas({ onBack }) {
     // Caso base: B ya ganó la serie (j = 0) → probabilidad = 0
     for (let i = 1; i <= m; i++) Tabla[i][0] = 0
 
-    // Tabla[0][0] permanece null (no tiene sentido: ambos ya ganaron)
+    const q = usarLocalVisita ? null : 1 - Number(p) // B, sin diferencia de localía
+    const qh = usarLocalVisita ? 1 - Number(pr) : null // B gana en casa
+    const qr = usarLocalVisita ? 1 - Number(ph) : null // B gana de visita
 
     // Llenar la tabla usando la recurrencia (de i=1 a m, de j=1 a m)
     for (let i = 1; i <= m; i++) {
       for (let j = 1; j <= m; j++) {
-
-        // Número del juego que se jugaría en el estado (i, j):
-        // ya se jugaron (m-i) victorias de A y (m-j) victorias de B → juego 2m-i-j+1
-        const numJuego = 2 * m - i - j + 1
-
-        // Probabilidad p de que A gane este juego específico
-        let pJuego
-        if (usarLocalVisita) {
-          const esLocal = formato[numJuego - 1] // true = A juega en casa
-          pJuego = esLocal ? Number(ph) : Number(pr)
-        } else {
-          pJuego = Number(p) // misma probabilidad para todos los juegos
-        }
-
-        // Complemento q: probabilidad de que B gane este juego
-        const q = 1 - pJuego
-
         // Recurrencia: Tabla[i][j] = p * Tabla[i-1][j] + q * Tabla[i][j-1]
-        Tabla[i][j] = pJuego * Tabla[i - 1][j] + q * Tabla[i][j - 1]
+        let pJuego, qJuego
+        if (q === null) {
+          const esLocal = formato[2*m-i-j] // ver si A es local o visita en este juego
+          pJuego = esLocal ? Number(ph) : Number(pr) // true = A juega en casa
+          qJuego = esLocal ? qr : qh
+        } else {
+          pJuego = Number(p)
+          qJuego = q
+        }
+        Tabla[i][j] = pJuego * Tabla[i - 1][j] + qJuego * Tabla[i][j - 1]
       }
     }
 
     // La respuesta es Tabla[m][m]: probabilidad de que A gane la serie desde el inicio
-    setResultado({ Tabla, m, maxJuegos, probGanar: Tabla[m][m] })
+    setResultado({ Tabla, m, n, probGanar: Tabla[m][m] })
   }
 
-  // ============================================================
-  // GUARDAR ARCHIVO .TXT
-  // Incluye parámetros de entrada + tabla completa con casos base
-  // ============================================================
+  /* ============================================================
+     Guardar Archivo .txt
+     ============================================================ */
   const handleGuardarArchivo = () => {
     if (!resultado) {
       setError('Primero debes resolver el problema antes de guardar el archivo.')
       return
     }
 
-    const formatearTabla = (Tabla, titulo, mVal) => {
+    const formatearTabla = (Tabla, mVal) => {
       const datos = []
       for (let i = 0; i <= mVal; i++) {
         const fila = []
@@ -187,12 +171,8 @@ function SeriesDeportivas({ onBack }) {
         datos.push(fila)
       }
 
-      const anchoEtiquetaFila = Math.max(String(mVal).length, 3)
-      const anchosCols = Array.from({ length: mVal + 1 }, (_, j) => {
-        let maxAncho = String(j).length
-        for (let i = 0; i <= mVal; i++) maxAncho = Math.max(maxAncho, datos[i][j].length)
-        return maxAncho
-      })
+      const anchoFila = 3
+      const anchosCols = 6
 
       const centrar = (texto, ancho) => {
         const str = String(texto)
@@ -201,28 +181,24 @@ function SeriesDeportivas({ onBack }) {
         return ' '.repeat(izq) + str + ' '.repeat(total - izq)
       }
 
-      const lineaBorde = () => {
-        let linea = '+' + '-'.repeat(anchoEtiquetaFila + 2) + '+'
-        for (const ancho of anchosCols) linea += '-'.repeat(ancho + 2) + '+'
-        return linea
-      }
-
-      const borde = lineaBorde()
-      let salida = `${titulo}\n` + borde + '\n'
-      salida += `| ${centrar('i/j', anchoEtiquetaFila)} |`
-      for (let j = 0; j <= mVal; j++) salida += ` ${centrar(j, anchosCols[j])} |`
+      // Líneas de la tabla
+      const borde = '+' + '-'.repeat(anchoFila + 2) + '+' + Array(mVal + 1).fill('-'.repeat(anchosCols + 2) + '+').join('')
+      let salida = 'Tabla[i][j] - Probabilidad de que A gane la serie\n' + borde + '\n'
+      salida += `| ${centrar('i/j', anchoFila)} |`
+      for (let j = 0; j <= mVal; j++) salida += ` ${centrar(j, anchosCols)} |`
       salida += '\n' + borde + '\n'
 
+      // Líneas de datos
       for (let i = 0; i <= mVal; i++) {
-        salida += `| ${centrar(i, anchoEtiquetaFila)} |`
-        for (let j = 0; j <= mVal; j++) salida += ` ${centrar(datos[i][j], anchosCols[j])} |`
+        salida += `| ${centrar(i, anchoFila)} |`
+        for (let j = 0; j <= mVal; j++) salida += ` ${centrar(datos[i][j], anchosCols)} |`
         salida += '\n'
       }
 
-      return salida + borde
+      return salida + borde // devuelve el formato listo y termina de cerrar la tabla
     }
 
-    let contenido = `Numero maximo de juegos = ${n}\n-----------------------------------------------\n`
+    let contenido = `Número máximo de juegos = ${n}\n-----------------------------------------------\n`
     contenido += `Modo = ${usarLocalVisita ? 'con diferencia casa/visita' : 'sin diferencia casa/visita'}\n-----------------------------------------------\n`
 
     if (usarLocalVisita) {
@@ -235,8 +211,9 @@ function SeriesDeportivas({ onBack }) {
 
     contenido += `Victorias necesarias = ${resultado.m}\n-----------------------------------------------\n`
     contenido += `Probabilidad de que A gane la serie = ${resultado.probGanar.toFixed(4)}\n-----------------------------------------------\n\n`
-    contenido += formatearTabla(resultado.Tabla, 'Tabla[i][j] - Probabilidad de que A gane la serie', resultado.m)
+    contenido += formatearTabla(resultado.Tabla, resultado.m)
 
+    // Crear un Blob de texto plano, generar URL temporal y crear la descarga
     const blob = new Blob([contenido], { type: 'text/plain' })
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
@@ -247,7 +224,7 @@ function SeriesDeportivas({ onBack }) {
   }
 
   // ============================================================
-  // CARGAR ARCHIVO .TXT
+  // Cargar Archivo .txt
   // ============================================================
   const handleCargarArchivo = (e) => {
     const archivo = e.target.files[0]
@@ -258,11 +235,12 @@ function SeriesDeportivas({ onBack }) {
       try {
         const lineas = evento.target.result.split('\n').map(l => l.trim())
 
-        let nuevoN = null, nuevoModo = null, nuevoPh = null
-        let nuevoPr = null, nuevoP = null, nuevoFormato = null
+        // Variables para almacenar los valores encontrados en el archivo
+        let nuevoN = null, nuevoModo = null, nuevoPh = null, nuevoPr = null, nuevoP = null, nuevoFormato = null
 
+        // Buscar cada valor para las variables identificando su línea
         for (const linea of lineas) {
-          if (linea.startsWith('Numero maximo de juegos ='))
+          if (linea.startsWith('Número máximo de juegos ='))
             nuevoN = Number(linea.split('=')[1].trim())
           if (linea.startsWith('Modo ='))
             nuevoModo = linea.split('=')[1].trim().includes('sin') ? 'sin' : 'con'
@@ -283,19 +261,21 @@ function SeriesDeportivas({ onBack }) {
           return
         }
 
-        const esperadoM = Math.floor(nuevoN / 2) + 1
-        const esperadoMaxJuegos = 2 * esperadoM - 1
-        const modoFinal = nuevoModo ?? 'con'
+        if (nuevoModo === null) {
+          setError('Archivo inválido: no se encontró el modo de cálculo (con o sin diferencia casa/visita).')
+          return
+        }
 
-        if (modoFinal === 'con') {
+        // Si hay diferencia casa/visita, validar ph, pr y formato. Si no, validar p
+        if (nuevoModo === 'con') {
           if (nuevoPh === null || isNaN(nuevoPh) || nuevoPh < 0 || nuevoPh > 1) {
             setError('Archivo inválido: ph faltante o fuera de rango.'); return
           }
           if (nuevoPr === null || isNaN(nuevoPr) || nuevoPr < 0 || nuevoPr > 1) {
             setError('Archivo inválido: pr faltante o fuera de rango.'); return
           }
-          if (!Array.isArray(nuevoFormato) || nuevoFormato.length !== esperadoMaxJuegos) {
-            setError(`Archivo inválido: el formato debe tener ${esperadoMaxJuegos} entradas para n=${nuevoN}.`); return
+          if (!Array.isArray(nuevoFormato) || nuevoFormato.length !== nuevoN) {
+            setError(`Archivo inválido: el formato debe tener ${nuevoN} entradas.`); return
           }
           setN(nuevoN); setPh(String(nuevoPh)); setPr(String(nuevoPr))
           setFormato(nuevoFormato); setUsarLocalVisita(true)
@@ -304,7 +284,7 @@ function SeriesDeportivas({ onBack }) {
             setError('Archivo inválido: p faltante o fuera de rango.'); return
           }
           setN(nuevoN); setP(String(nuevoP))
-          setFormato(Array(esperadoMaxJuegos).fill(true)); setUsarLocalVisita(false)
+          setFormato(Array(nuevoN).fill(true)); setUsarLocalVisita(false)
         }
 
         setResultado(null); setError('')
@@ -312,11 +292,11 @@ function SeriesDeportivas({ onBack }) {
         setError('No se pudo leer el archivo.')
       }
     }
-    lector.readAsText(archivo)
+    lector.readAsText(archivo) // Limpiar el input para permitir cargar el mismo archivo nuevamente si se desea
   }
 
   // ============================================================
-  // RENDERIZAR LA TABLA DE PROBABILIDADES
+  // Renderizar la tabla de probabilidades
   // ============================================================
   const renderTabla = (Tabla, mVal) => {
     if (!Tabla) return null
@@ -389,7 +369,6 @@ function SeriesDeportivas({ onBack }) {
           </FormControl>
           <Typography sx={{ mt: 1, color: colors.textSecondary, fontSize: '0.875rem' }}>
             Victorias necesarias: <strong style={{ color: colors.textPrimary }}>{m}</strong>
-            &nbsp;·&nbsp; Juegos posibles: <strong style={{ color: colors.textPrimary }}>{maxJuegos}</strong>
           </Typography>
         </Box>
 
@@ -439,7 +418,7 @@ function SeriesDeportivas({ onBack }) {
         )}
 
         {/* Formato de la serie */}
-        {usarLocalVisita && maxJuegos > 0 && (
+        {usarLocalVisita && n > 0 && (
           <Box sx={{ mb: 3 }}>
             <Typography variant="h6" sx={{ mb: 1 }}>Formato de la serie</Typography>
             <Typography sx={{ mb: 2, color: colors.textSecondary, fontSize: '0.875rem' }}>
