@@ -5,17 +5,24 @@ import Menu from './components/Menu/Menu'
 import MultiplicacionMatrices from './components/MultiplicaciondeMatrices/MultiplicaciondeMatrices.jsx'
 import OptimalBSTPage from './components/ABB/OptimalBSTPage'
 import SeriesDeportivas from './components/MenuSeriesDeportivas/SeriesDeportivas.jsx'
+import ReemplazoEquipos from './components/ReemplazoEquipos/ReemplazoEquipos.jsx'
 
 const SCREEN = {
   MENU: 'menu',
   OBST: 'obst',
-  MATRICES: 'matrices'
+  MATRICES: 'matrices',
+  REEMPLAZO: 'reemplazo'
 }
 
 function App() {
   const [screen, setScreen] = useState(SCREEN.MENU)
 
   const handleMenuSelect = (title) => {
+    if (title === 'Reemplazo de Equipos') {
+      setScreen(SCREEN.REEMPLAZO)
+      return
+    }
+
     if (title === 'Árboles Binarios de Búsqueda Óptimos') {
       setScreen(SCREEN.OBST)
       return
@@ -63,6 +70,10 @@ function App() {
 
       {screen === SCREEN.MENU && (
         <Menu onSelect={handleMenuSelect} />
+      )}
+
+      {screen === SCREEN.REEMPLAZO && (
+        <ReemplazoEquipos onBack={handleBack} />
       )}
 
       {screen === SCREEN.OBST && (

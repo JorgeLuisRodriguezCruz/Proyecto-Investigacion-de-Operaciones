@@ -1,0 +1,31 @@
+Tipo de Problema = Reemplazo de Equipos
+-----------------------------------------------
+Costo Inicial = 500
+Plazo del Proyecto = 5
+Vida Util = 2
+Usar Inflacion = No
+Indice de Inflacion = 0%
+-----------------------------------------------
+
+Tabla de Datos:
+Tiempo | Costo Mantenimiento | Precio de Venta
+  1    |       75      |     425
+  2    |       150      |     350
+
+-----------------------------------------------
+RESULTADOS
+-----------------------------------------------
+Costo Minimo Total = 750.00
+
+Tabla G(t):
+t | G(t) | Proximo Reemplazo
+  0  | 750.00  | 1
+  1  | 600.00  | 2
+  2  | 450.00  | 3
+  3  | 300.00  | 4
+  4  | 150.00  | 5
+  5  | 0.00  | 5
+
+-----------------------------------------------
+Planes Optimos de Reemplazo:
+Plan 1: 0 -> 1 -> 2 -> 3 -> 4 -> 5 (Costo: 750.00)

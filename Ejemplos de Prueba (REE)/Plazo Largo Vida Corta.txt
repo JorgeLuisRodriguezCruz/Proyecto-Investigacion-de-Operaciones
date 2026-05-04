@@ -1,0 +1,14 @@
+Tipo de Problema = Reemplazo de Equipos
+-----------------------------------------------
+Costo Inicial = 15000
+Plazo del Proyecto = 12
+Vida Util = 3
+Usar Inflacion = No
+Indice de Inflacion = 0%
+-----------------------------------------------
+
+Tabla de Datos:
+Tiempo | Costo Mantenimiento | Precio de Venta
+  1    |       2000      |     10000
+  2    |       2500      |     7000
+  3    |       3200      |     4500
