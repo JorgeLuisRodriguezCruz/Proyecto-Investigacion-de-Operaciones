@@ -1,0 +1,9 @@
+archer 0.10
+benson 0.12
+carter 0.05
+dexter 0.18
+ellis 0.07
+fletcher 0.20
+gardner 0.14
+harper 0.09
+iverson 0.05

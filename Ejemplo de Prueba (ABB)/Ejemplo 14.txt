@@ -1,0 +1,9 @@
+amadeus 0.08
+beethoven 0.10
+chopin 0.05
+debussy 0.12
+einstein 0.09
+feynman 0.13
+galileo 0.17
+hawking 0.11
+tesla 0.15

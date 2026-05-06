@@ -1,0 +1,9 @@
+arthur 0.11
+benjamin 0.10
+christian 0.05
+daniel 0.17
+edward 0.09
+frederick 0.20
+gabriel 0.13
+henry 0.08
+isaac 0.07

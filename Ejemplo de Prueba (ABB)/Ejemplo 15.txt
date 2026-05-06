@@ -1,0 +1,9 @@
+andrea 0.11
+bruno 0.09
+carla 0.06
+diego 0.10
+elsa 0.08
+franco 0.14
+giorgio 0.12
+helena 0.15
+isabel 0.15

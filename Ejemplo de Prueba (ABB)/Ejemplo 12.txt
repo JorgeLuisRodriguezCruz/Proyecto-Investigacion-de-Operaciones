@@ -1,0 +1,9 @@
+angel 0.09
+basil 0.13
+clyde 0.05
+dashiell 0.16
+ezekiel 0.08
+fabian 0.11
+gideon 0.14
+hugo 0.12
+isaiah 0.12

@@ -1,0 +1,9 @@
+alpha 0.08
+bravo 0.06
+charlie 0.12
+delta 0.10
+echo 0.14
+foxtrot 0.09
+golf 0.16
+hotel 0.20
+india 0.05

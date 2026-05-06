@@ -1,0 +1,9 @@
+apple 0.12
+banana 0.08
+cherry 0.03
+date 0.22
+eggplant 0.05
+fig 0.11
+grape 0.17
+kiwi 0.10
+lemon 0.12

@@ -1,0 +1,9 @@
+april 0.06
+brittany 0.08
+carmen 0.04
+diana 0.15
+elsa 0.09
+flora 0.18
+gwen 0.12
+helen 0.13
+iris 0.15

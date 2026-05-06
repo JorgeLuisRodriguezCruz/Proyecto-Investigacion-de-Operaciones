@@ -1,0 +1,9 @@
+anderson 0.09
+blake 0.13
+cole 0.06
+dennis 0.21
+everett 0.04
+palmer 0.17
+quincy 0.02
+ross 0.12
+stewart 0.16

@@ -1,0 +1,9 @@
+aurora 0.10
+brook 0.07
+canyon 0.03
+desert 0.14
+echo 0.11
+falcon 0.19
+glacier 0.16
+harbor 0.08
+island 0.12

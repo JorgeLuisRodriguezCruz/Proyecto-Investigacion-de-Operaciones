@@ -1,0 +1,9 @@
+apollo 0.10
+boreas 0.07
+ceres 0.06
+demeter 0.14
+eurus 0.11
+faunus 0.09
+gaea 0.18
+hecate 0.16
+iris 0.09

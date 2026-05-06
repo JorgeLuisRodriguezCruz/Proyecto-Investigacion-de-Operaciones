@@ -1,0 +1,9 @@
+anton 0.07
+becker 0.10
+cohen 0.05
+daniels 0.18
+ellis 0.09
+foster 0.14
+goodwin 0.20
+harper 0.11
+irwin 0.06

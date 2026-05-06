@@ -1,0 +1,9 @@
+berlin 0.11
+cairo 0.09
+dublin 0.04
+edmonton 0.13
+florence 0.10
+geneva 0.18
+helsinki 0.15
+istanbul 0.12
+jakarta 0.08

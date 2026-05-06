@@ -1,0 +1,9 @@
+amber 0.14
+brenda 0.08
+cassandra 0.06
+daphne 0.13
+evelyn 0.09
+frances 0.11
+gwendolyn 0.16
+hannah 0.12
+ivory 0.11
