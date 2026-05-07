@@ -269,10 +269,10 @@ function TreeDiagram({ tree }) {
               y1={getNodeY(from) + nodeHeight / 2}
               x2={getNodeX(to)}
               y2={getNodeY(to) - nodeHeight / 2}
-              stroke={colors.primary}
+              stroke="#4caf50"
               strokeWidth="3"
               strokeLinecap="round"
-              opacity="0.7"
+              opacity="0.85"
             />
           )
         })}
@@ -398,14 +398,14 @@ function OptimalBSTPage({ onBack }) {
           <Button variant="outlined" onClick={onBack}>
             Volver al menú
           </Button>
-          <Button variant="outlined" component="label">
+          <Button variant="contained" color="secondary" component="label">
             Cargar .txt
             <input hidden type="file" accept=".txt" onChange={handleLoadFile} />
           </Button>
-          <Button variant="contained" onClick={handleSaveFile}>
+          <Button variant="contained" color="success" onClick={handleSaveFile}>
             Guardar .txt
           </Button>
-          <Button variant="contained" color="success" onClick={handleCalculate}>
+          <Button variant="contained" color="primary" onClick={handleCalculate}>
             Calcular
           </Button>
         </Stack>

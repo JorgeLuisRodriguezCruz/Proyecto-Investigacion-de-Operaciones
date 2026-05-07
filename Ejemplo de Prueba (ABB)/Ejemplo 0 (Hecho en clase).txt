@@ -1,0 +1,4 @@
+Harrison,0.18
+Lennon,0.32
+McCarney,0.39
+Starr,0.11
